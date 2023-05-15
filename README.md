@@ -6,10 +6,10 @@
 - Lightweight library
 - Easy to install and use
 - Multiple nodes and types
-- Save/Load node trees
-- Advanced canvas with zoom and drag
+- **Save/Load** node trees
+- Advanced canvas with **zoom and drag**
 - Customizable options
-- Built-in Node menu
+- Built-in **Node menu**
 
 ## Installation
 ```
