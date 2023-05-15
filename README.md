@@ -15,6 +15,7 @@
 ```
 pip package will be available soon...
 ```
+### [<img alt="GitHub repo size" src="https://img.shields.io/github/repo-size/Akascape/CTkCTkNodeSystem?&color=green&label=Download%20Source%20Code&logo=Python&logoColor=yellow&style=for-the-badge"  width="400">](https://github.com/Akascape/CTkNodeSystem/archive/refs/heads/main.zip)
 
 ## Overview:
 
@@ -29,6 +30,11 @@ pip package will be available soon...
 - Node Canvas
 
 ![node canvas](https://github.com/Akascape/TkNodeSystem/assets/89206401/e2425f05-45ac-4831-9273-7fe673895755)
+
+## Documentation
+Full documentation can be found in the **Wiki** page
+
+[<img src="https://img.shields.io/badge/View-Docs-informational?&color=yellow&style=for-the-badge" width="150">]()
 
 ### Bug Fixes
 This library is at **experimental stage**, so there must be some bugs which can appear randomly.
