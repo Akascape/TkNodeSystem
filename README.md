@@ -17,6 +17,10 @@ pip package will be available soon...
 ```
 ### [<img alt="GitHub repo size" src="https://img.shields.io/github/repo-size/Akascape/CTkCTkNodeSystem?&color=green&label=Download%20Source%20Code&logo=Python&logoColor=yellow&style=for-the-badge"  width="400">](https://github.com/Akascape/CTkNodeSystem/archive/refs/heads/main.zip)
 
+### Requirements
+- tkinter
+- customtkinter _(for the node menu)_
+
 ## Overview:
 
 - Node Types
@@ -25,7 +29,7 @@ pip package will be available soon...
 
 - Node Menu
 
-![node menu](https://github.com/Akascape/TkNodeSystem/assets/89206401/4b8b5a61-0d1e-483b-80dd-a1b0be98754c)
+![node_menu](https://github.com/Akascape/TkNodeSystem/assets/89206401/62ef4115-982e-4df2-9ad0-6626f43ca459)
 
 - Node Canvas
 
