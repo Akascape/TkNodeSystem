@@ -7,7 +7,7 @@
 - Easy to install and use
 - Multiple nodes and inputs
 - **Save/Load** node trees
-- canvas with **zoom and drag** feature
+- Canvas with **zoom and drag** feature
 - Customizable options
 - Built-in **Node menu**
 
