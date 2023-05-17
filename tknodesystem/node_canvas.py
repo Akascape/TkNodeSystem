@@ -146,8 +146,8 @@ class NodeCanvas(tkinter.Canvas):
             self.wire_width = kwargs.pop("wire_width")
             for i in self.line_ids:
                 i.configure(wire_width=self.wire_width)
-        if "dash" in kwargs:
-            self.dash = kwargs.pop("dash")
+        if "wire_dash" in kwargs:
+            self.dash = kwargs.pop("wire_dash")
             for i in self.line_ids:
                 i.configure(dash=self.dash)
         if "wire_hover_color" in kwargs:
