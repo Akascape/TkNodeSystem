@@ -93,7 +93,13 @@ class NodeValue(Node):
             
         self.canvas.obj_list.remove(self)
         super().destroy()
-            
+
+    def exists(self):
+        if self.ID in self.canvas.find_all():
+            return True
+        else:
+            return False
+        
     def configure(self, **kwargs):
         """ configure options """
         
@@ -435,7 +441,13 @@ class NodeOperation(Node):
 
         self.canvas.obj_list.remove(self)
         super().destroy()
-            
+        
+    def exists(self):
+        if self.ID in self.canvas.find_all():
+            return True
+        else:
+            return False
+        
     def configure(self, **kwargs):
         """ configure options """
         
@@ -638,7 +650,13 @@ class NodeCompile(Node):
             
         self.canvas.obj_list.remove(self)
         super().destroy()
-            
+        
+    def exists(self):
+        if self.ID in self.canvas.find_all():
+            return True
+        else:
+            return False
+        
     def configure(self, **kwargs):
         """ configure options """
         
