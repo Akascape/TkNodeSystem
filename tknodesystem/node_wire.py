@@ -92,3 +92,6 @@ class NodeWire():
             self.canvas.itemconfig(self.ID, dash=self.dash if self.dash else ())
         if "wire_hover_color" in kwargs:
             self.canvas.itemconfig(self.ID, activefill=kwargs.pop("wire_hover_color"))
+        if len(kwargs)>0:
+            raise ValueError("This option is not configurable:" + list(kwargs.keys())[0])
+        
