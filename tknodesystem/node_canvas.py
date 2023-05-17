@@ -132,6 +132,7 @@ class NodeCanvas(tkinter.Canvas):
         self.input_num = 0
         self.compile_num = 0
         self.socket_num = 0
+        self.line_list = set()
         
     def configure(self, **kwargs):
         """ configure options """
