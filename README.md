@@ -15,7 +15,7 @@
 ```
 pip package will be available soon...
 ```
-### [<img alt="GitHub repo size" src="https://img.shields.io/github/repo-size/Akascape/CTkCTkNodeSystem?&color=green&label=Download%20Source%20Code&logo=Python&logoColor=yellow&style=for-the-badge"  width="400">](https://github.com/Akascape/CTkNodeSystem/archive/refs/heads/main.zip)
+### [<img alt="GitHub repo size" src="https://img.shields.io/github/repo-size/Akascape/TkNodeSystem?&color=green&label=Download%20Source%20Code&logo=Python&logoColor=yellow&style=for-the-badge"  width="400">](https://github.com/Akascape/TkNodeSystem/archive/refs/heads/main.zip)
 
 ### Requirements
 - tkinter
