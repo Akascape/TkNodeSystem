@@ -319,7 +319,16 @@ class NodeOperation(Node):
             return
         if self.canvas.outputcell==self:
             return
-           
+        
+        m = self.connected_node
+        for i in range(self.canvas.operation_num):
+            if m is None:
+                break
+            if m.type=="NodeOperation":
+                if self.canvas.outputcell==m:
+                    return
+            m = m.connected_node
+            
         try: self.canvas.delete(line_id.ID)
         except: None
         
