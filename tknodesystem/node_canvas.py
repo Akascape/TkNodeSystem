@@ -139,6 +139,7 @@ class NodeCanvas(tkinter.Canvas):
         
         if "wire_color" in kwargs:
             self.wire_color = kwargs.pop("wire_color")
+            self._wire_color = self.wire_color
             for i in self.line_ids:
                 i.configure(wire_color=self.wire_color)
         if "wire_width" in kwargs:
