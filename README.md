@@ -1,6 +1,6 @@
 ![title](https://github.com/Akascape/TkNodeSystem/assets/89206401/a84cb60a-cc6f-4609-8452-3ff4fcd0c46b)
 
-**Simple Node System in tkinter python!**
+**Simple Node System (DAG) in tkinter python!**
 
 ## Feature
 - Lightweight library
