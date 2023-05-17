@@ -40,7 +40,7 @@ Full documentation can be found in the **Wiki** page
 
 [<img src="https://img.shields.io/badge/View-Docs-informational?&color=yellow&style=for-the-badge" width="150">]()
 
-Examples are given in the `example folder`
+Examples are given in the `examples` folder
 
 ### Bug Fixes
 This library is at **experimental stage**, so there must be some bugs which can appear randomly.
