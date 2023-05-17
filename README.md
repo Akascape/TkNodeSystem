@@ -40,7 +40,9 @@ Full documentation can be found in the **Wiki** page
 
 [<img src="https://img.shields.io/badge/View-Docs-informational?&color=yellow&style=for-the-badge" width="150">](https://github.com/Akascape/TkNodeSystem/wiki)
 
-Examples are given in the `examples` folder
+## Examples
+Examples are given in the [`examples`](https://github.com/Akascape/TkNodeSystem/tree/main/examples) folder
+![Example App](https://github.com/Akascape/TkNodeSystem/assets/89206401/ea818333-c979-4402-bc7c-8850930dc087)
 
 ### Bug Fixes
 This library is at **experimental stage**, so there must be some bugs which can appear randomly.
