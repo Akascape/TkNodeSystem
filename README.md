@@ -50,4 +50,4 @@ Examples are given in the `examples` folder
 ### Bug Fixes
 This library is at **experimental stage**, so there must be some bugs which can appear randomly.
 
-**So, please report the bugs at the issues/discussion tab. A pull request is always welcomed :)**
+**So, please report the bugs at the issues/discussions tab. A pull request is always welcomed :)**
