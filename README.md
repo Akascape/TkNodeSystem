@@ -17,6 +17,9 @@ pip install tknodesystem
 ```
 ### [<img alt="GitHub repo size" src="https://img.shields.io/github/repo-size/Akascape/TkNodeSystem?&color=cyan&label=Download%20Source%20Code&logo=Python&logoColor=yellow&style=for-the-badge"  width="400">](https://github.com/Akascape/TkNodeSystem/archive/refs/heads/main.zip)
 
+[![PyPI](https://img.shields.io/pypi/v/tknodesystem)](https://pypi.org/project/tknodesystem)
+[![Downloads](https://static.pepy.tech/badge/tknodesystem)](https://pepy.tech/project/tknodesystem)
+
 ### Requirements
 - tkinter
 - customtkinter _(for the node menu)_
