@@ -38,7 +38,7 @@ pip install tknodesystem
 ## Documentation
 Full documentation can be found in the **Wiki** page
 
-[<img src="https://img.shields.io/badge/View-Docs-informational?&color=yellow&style=for-the-badge" width="150">](https://github.com/Akascape/TkNodeSystem/wiki)
+[<img src="https://img.shields.io/badge/View-Docs-informational?&color=c8ab09&style=for-the-badge" width="150">](https://github.com/Akascape/TkNodeSystem/wiki)
 
 ## Examples
 Examples are given in the `examples` folder
@@ -47,4 +47,4 @@ Examples are given in the `examples` folder
 ### Bug Fixes
 This library is at **experimental stage**, so there must be some bugs which can appear randomly.
 
-**So, please report the bugs at the issues/discussions. A pull request is always welcomed :)**
+**So, please report the bugs at the issues/discussion tab. A pull request is always welcomed :)**
