@@ -21,7 +21,7 @@ pip install tknodesystem
 - tkinter
 - customtkinter _(for the node menu)_
 
-## Overview:
+## Overview
 
 - Node Types
 
