@@ -7,7 +7,7 @@ class NodeValue(Node):
     def __init__(self, canvas, width=100, height=50, value=0, border_color='white', text=None, corner_radius=25,
                  border_width=0, fg_color='#37373D', text_color='white', font=("",10), socket_radius=8, socket_hover=True,
                  socket_color="green", socket_hover_color="grey50", highlightcolor='#52d66c', hover=True,
-                 click_command=None, side="right", x=None, y=None, num=None):
+                 click_command=None, side="right", x=0, y=0, num=None):
 
         self.text = text
         self.canvas = canvas
@@ -64,7 +64,7 @@ class NodeValue(Node):
             for i in self.allIDs:
                 self.canvas.scale(i, 0, 0, 0.9, 0.9)
                 
-        if x and y:
+        if x or y:
             super().move(x,y)
      
         self.canvas.obj_list.add(self)
@@ -93,7 +93,10 @@ class NodeValue(Node):
             
         self.canvas.obj_list.remove(self)
         super().destroy()
-
+        
+        for i in self.connected_func:
+            i.update()
+                
     def exists(self):
         if self.ID in self.canvas.find_all():
             return True
@@ -135,7 +138,7 @@ class NodeValue(Node):
 class NodeOperation(Node):
     def __init__(self, canvas, width=100, height=None, inputs=2, border_color='white', text=None,
                  socket_radius=8, corner_radius=25, border_width=0, fg_color='#37373D', text_color='white', font=("",10),
-                 highlightcolor='#52d66c', hover=True, socket_color="green", socket_hover_color="grey50", x=None, y=None,
+                 highlightcolor='#52d66c', hover=True, socket_color="green", socket_hover_color="grey50", x=0, y=0,
                  multiside=False, command=None, output_socket_color="green", click_command=None, socket_hover=True, num=None):
 
         self.text = text
@@ -185,7 +188,8 @@ class NodeOperation(Node):
         self.line4 = None
         self.line5 = None
         self.socket_colors = []
-        self.connected_node = None
+        self.connected_node = set()
+        self.connected_node_first = None
         x_pos = x
         y_pos = y
             
@@ -296,7 +300,7 @@ class NodeOperation(Node):
             for i in self.allIDs:
                 self.canvas.scale(i, 0, 0, 0.9, 0.9)
                 
-        if x_pos and y_pos:
+        if x_pos or y_pos:
             super().move(x_pos,y_pos)
             
         self.canvas.obj_list.add(self)
@@ -314,21 +318,23 @@ class NodeOperation(Node):
  
     def connect_input(self, line_id, input_id):
         """ connect input sockets """
-        
-        if self.canvas.outputcell==self.connected_node:
+        if self.canvas.outputcell is None:
+            return
+        if self.canvas.outputcell in self.connected_node:
             return
         if self.canvas.outputcell==self:
             return
-        
-        m = self.connected_node
+ 
+        m = self.connected_node_first
+
         for i in range(self.canvas.operation_num):
             if m is None:
                 break
             if m.type=="NodeOperation":
-                if self.canvas.outputcell==m:
+                if self.canvas.outputcell in m.connected_node:
                     return
-            m = m.connected_node
-            
+            m = m.connected_node_first
+        
         try: self.canvas.delete(line_id.ID)
         except: None
         
@@ -339,9 +345,11 @@ class NodeOperation(Node):
         if self.canvas.clickcount == 2:
             self.canvas.clickcount = 0
             self.canvas.conectcells()
-            if self.canvas.outputcell: self.canvas.outputcell.connected_node = self
             if self.canvas.outputcell.type=="NodeValue":
                 self.canvas.outputcell.connected_func.add(self)
+            elif self.canvas.outputcell.type=="NodeOperation":
+                self.canvas.outputcell.connected_node.add(self)
+                self.canvas.outputcell.connected_node_first = self
             try:
                 if input_id=="input1":
                     for x in self.canvas.line_list:
@@ -380,9 +388,13 @@ class NodeOperation(Node):
                     self.canvas.line_list.add(l)
             except AttributeError: None
         else:
-            if self.canvas.outputcell: self.canvas.outputcell.connected_node = None
             if self.canvas.outputcell.type=="NodeValue":
                 try: self.canvas.outputcell.connected_func.remove(self)
+                except KeyError: None
+            elif self.canvas.outputcell.type=="NodeOperation":
+                try:
+                    self.canvas.outputcell.connected_node.remove(self)
+                    self.canvas.outputcell.connected_node_first = None
                 except KeyError: None
             try:
                 if input_id=="input1":
@@ -435,9 +447,10 @@ class NodeOperation(Node):
         else:
             self.output_.value = None
 
-        if self.connected_node:
-            self.connected_node.update()
-
+        if len(self.connected_node)>0:
+            for i in self.connected_node:
+                i.update()
+        
     def get(self):
         """ get the current value of node """
         return self.output_.value
@@ -451,6 +464,10 @@ class NodeOperation(Node):
         self.canvas.obj_list.remove(self)
         super().destroy()
         
+        if len(self.connected_node)>0:
+            for i in self.connected_node:
+                i.update()
+                
     def exists(self):
         if self.ID in self.canvas.find_all():
             return True
@@ -522,7 +539,7 @@ class NodeOperation(Node):
             raise ValueError("This option is not configurable:" + list(kwargs.keys())[0])
         
 class NodeCompile(Node):
-    def __init__(self, canvas, width=100, height=50, border_color='white', text="Compile", socket_radius=8, corner_radius=25, x=None, y=None,
+    def __init__(self, canvas, width=100, height=50, border_color='white', text="Compile", socket_radius=8, corner_radius=25, x=0, y=0,
                  border_width=0, fg_color='#37373D',text_color='white', font=("",10), highlightcolor='#52d66c', hover=True, socket_hover=True,
                  socket_color="green", socket_hover_color="grey50", show_value=True, command=None, click_command=None, side="left", num=None):
 
@@ -595,7 +612,7 @@ class NodeCompile(Node):
             for i in self.allIDs:
                 self.canvas.scale(i, 0, 0, 0.9, 0.9)
                 
-        if x and y:
+        if x or y:
             super().move(x,y)
             
         self.canvas.obj_list.add(self)

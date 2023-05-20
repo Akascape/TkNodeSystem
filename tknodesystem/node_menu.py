@@ -15,9 +15,8 @@ class NodeMenu(customtkinter.CTkToplevel):
         super().__init__(takefocus=1)
         
         self.focus()
-        self.overrideredirect(True)
         self.alpha = alpha
-        self.attributes('-alpha', self.alpha)
+        self.attributes('-alpha', 0)
         self.corner = frame_corner_radius
 
         self.attach = attach
@@ -28,17 +27,29 @@ class NodeMenu(customtkinter.CTkToplevel):
         self.resize = resize
         self.button_num = 0
         self.node = {}
+        self.padding = 0
         
+        self.withdraw()
         if sys.platform.startswith("win"):
+            self.overrideredirect(True)
             self.transparent_color = self._apply_appearance_mode(self._fg_color)
-            self.attributes("-transparentcolor", self.transparent_color) 
+            self.attributes("-transparentcolor", self.transparent_color)
+            self.attach.bind("<Double-Button-3>", self.popup, add="+")
+            self.bind("<FocusOut>", lambda e: self._withdraw())
         elif sys.platform.startswith("darwin"):
+            self.overrideredirect(True)
             self.transparent_color = 'systemTransparent'
             self.attributes("-transparent", True)
             self.transient(self.master)
+            self.attach.bind("<Button-1>", lambda e: self._withdraw(), add="+")
+            self.attach.bind("<Double-Button-2>", self.popup, add="+")
         else:
+            self.attributes("-type", "splash")
             self.transparent_color = '#000001'
             self.corner = 0
+            self.padding = 20
+            self.attach.bind("<Double-Button-3>", self.popup, add="+")
+            self.bind("<FocusOut>", lambda e: self._withdraw())
             
         self.fg_color = customtkinter.ThemeManager.theme["CTkFrame"]["fg_color"] if fg_color is None else fg_color
         self.scroll_button_color = customtkinter.ThemeManager.theme["CTkScrollbar"]["button_color"] if scrollbar_button_color is None else scrollbar_button_color
@@ -75,7 +86,12 @@ class NodeMenu(customtkinter.CTkToplevel):
         
         self.frame._scrollbar.grid_configure(padx=3)
         
-        self.frame.pack(expand=True, fill="both", padx=8, pady=(0,6))
+        if self.padding:
+            frame_padding = 10
+        else:
+            frame_padding = (0,6)
+            
+        self.frame.pack(expand=True, fill="both", padx=8, pady=frame_padding)
         self.no_match = customtkinter.CTkLabel(self.frame, text="No Match")
         
         if justify.lower()=="left":
@@ -90,12 +106,9 @@ class NodeMenu(customtkinter.CTkToplevel):
         self.resizable(width=False, height=False)
         self.disable = False
     
-        self.attach.bind("<Double-Button-3>", self.popup, add="+")
         self.attach.bind_all("<space>", self.popup)
-        self.bind("<FocusOut>", lambda e: self._withdraw())
         
         self.update_idletasks()
-        self.withdraw()
         self.attach.focus_set()
 
     def _withdraw(self):
@@ -109,7 +122,7 @@ class NodeMenu(customtkinter.CTkToplevel):
                 break
             self.attributes("-alpha", i/100)
             self.update()
-            time.sleep(1/1000)
+            time.sleep(1/100)
             
     def fade_in(self):
         for i in range(0,100,10):
@@ -117,7 +130,7 @@ class NodeMenu(customtkinter.CTkToplevel):
                 break
             self.attributes("-alpha", i/100)
             self.update()
-            time.sleep(1/1000)
+            time.sleep(1/100)
             
     def search(self, a,b,c):
         self.live_update(self.var.get())
@@ -130,7 +143,7 @@ class NodeMenu(customtkinter.CTkToplevel):
                                                              fg_color=self.button_color,
                                                              anchor=self.justify, 
                                                              command=lambda: self._attach_key_press(command), **button_kwargs)
-        self.node[self.button_num].pack(fill="x", pady=5)
+        self.node[self.button_num].pack(fill="x", pady=5, padx=(self.padding,0))
         self.button_num +=1
 
     def destroy_popup(self):
@@ -144,13 +157,14 @@ class NodeMenu(customtkinter.CTkToplevel):
         
     def _iconify(self, x=None, y=None):
         self.focus_set()
+        self.search_entry.focus_set()
         self._deiconify()
         self.place_dropdown(x,y)
 
     def _attach_key_press(self, command):
         self.fade_out()
-        command()
         self.withdraw()
+        command()
         
     def live_update(self, string=None):
         if self.disable: return
@@ -162,11 +176,11 @@ class NodeMenu(customtkinter.CTkToplevel):
                 if not s.startswith(string.lower()):
                     self.node[key].pack_forget()
                 else:
-                    self.node[key].pack(fill="x", pady=5)
+                    self.node[key].pack(fill="x", pady=5, padx=(self.padding,0))
                     i+=1
                     
             if i==1:
-                self.no_match.pack(fill="x", pady=2)
+                self.no_match.pack(fill="x", pady=2, padx=(self.padding,0))
             else:
                 self.no_match.pack_forget()
             self.button_num = i
@@ -174,7 +188,7 @@ class NodeMenu(customtkinter.CTkToplevel):
         else:
             self.no_match.pack_forget()
             for key in self.node.keys():
-                self.node[key].pack(fill="x", pady=5)
+                self.node[key].pack(fill="x", pady=5, padx=(self.padding,0))
            
     def _deiconify(self):
         if self.button_num>0:

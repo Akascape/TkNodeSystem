@@ -2,7 +2,7 @@ import tkinter
 import platform
 import os
 import json
-
+import sys
 from .node_wire import NodeWire
 from .node_types import NodeValue, NodeOperation, NodeCompile
 
@@ -35,8 +35,12 @@ class NodeCanvas(tkinter.Canvas):
         self.set_grid_image(grid_image)
         
         if move:
-            self.tag_bind(self.grid, '<ButtonPress-2>', lambda e: self.getpos(e, 1))
-            self.tag_bind(self.grid, '<ButtonRelease-2>', lambda e: self.getpos(e, 0))
+            if sys.platform.startswith("darwin"):
+                self.tag_bind(self.grid, '<ButtonPress-3>', lambda e: self.getpos(e, 1))
+                self.tag_bind(self.grid, '<ButtonRelease-3>', lambda e: self.getpos(e, 0))
+            else:
+                self.tag_bind(self.grid, '<ButtonPress-2>', lambda e: self.getpos(e, 1))
+                self.tag_bind(self.grid, '<ButtonRelease-2>', lambda e: self.getpos(e, 0))
             self.tag_bind(self.grid, "<B2-Motion>", self.move_grid)
         
         if zoom:
@@ -182,7 +186,10 @@ class NodeCanvas(tkinter.Canvas):
 
     def load(self, filename):
         """ load the node tree back to the canvas """
-        
+
+        if not os.path.exists(filename):
+            raise FileNotFoundError("No such file found: " + str(filename))
+  
         self.clear()
         self.connect_wire = False
         self.wire_color = self.bg  # hides an unwanted glitch
