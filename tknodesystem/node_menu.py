@@ -28,6 +28,7 @@ class NodeMenu(customtkinter.CTkToplevel):
         self.button_num = 0
         self.node = {}
         self.padding = 0
+        self.focus_something = False
         
         self.withdraw()
         if sys.platform.startswith("win"):
@@ -43,6 +44,7 @@ class NodeMenu(customtkinter.CTkToplevel):
             self.transient(self.master)
             self.attach.bind("<Button-1>", lambda e: self._withdraw(), add="+")
             self.attach.bind("<Double-Button-2>", self.popup, add="+")
+            self.focus_something = True
         else:
             self.attributes("-type", "splash")
             self.transparent_color = '#000001'
@@ -159,6 +161,7 @@ class NodeMenu(customtkinter.CTkToplevel):
         self.focus_set()
         self.search_entry.focus_set()
         self._deiconify()
+        self.focus_something: self.node[0].focus_set()
         self.place_dropdown(x,y)
 
     def _attach_key_press(self, command):
