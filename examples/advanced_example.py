@@ -57,17 +57,19 @@ def add_effect(effect):
     """ node operations """
     global x
     def image_modify(img, value):
-        if effect=="Brightness":
-            mode = ImageEnhance.Brightness(img)
-        elif effect=="Contrast":
-            mode = ImageEnhance.Contrast(img)
-        elif effect=="Sharpness":
-            mode = ImageEnhance.Sharpness(img)
-        elif effect=="Color":
-            mode = ImageEnhance.Color(img)
+        try:
+            if effect=="Brightness":
+                mode = ImageEnhance.Brightness(img)
+            elif effect=="Contrast":
+                mode = ImageEnhance.Contrast(img)
+            elif effect=="Sharpness":
+                mode = ImageEnhance.Sharpness(img)
+            elif effect=="Color":
+                mode = ImageEnhance.Color(img)
+
+            return mode.enhance(sliders[value].get())
+        except AttributeError: None
             
-        return mode.enhance(sliders[value].get())
-    
     value = x 
     node = NodeOperation(canvas, inputs=1,  text=effect, command=lambda img: image_modify(img, value),
                          click_command=lambda: show_current_slider(node, value))
@@ -86,7 +88,6 @@ def show_image(output):
     img = customtkinter.CTkImage(output, size=(label_height, label_height*ratio))
     image_label.configure(image=img)
     
-
 menu = NodeMenu(canvas) # right click or press <space> to spawn the node menu
 menu.add_node(label="Media Import", command=input_media)
 menu.add_node(label="Media Out", command=lambda: NodeCompile(canvas, text="MediaOut", show_value=None, command=show_image))
