@@ -19,6 +19,7 @@ pip install tknodesystem
 
 [![PyPI](https://img.shields.io/pypi/v/tknodesystem)](https://pypi.org/project/tknodesystem)
 [![Downloads](https://static.pepy.tech/badge/tknodesystem)](https://pepy.tech/project/tknodesystem)
+![Platform](https://img.shields.io/powershellgallery/p/Pester?color=blue)
 
 ### Requirements
 - tkinter
