@@ -29,7 +29,7 @@ class Args():
                         'corner_radius': 25, 'border_width': 0, 'fg_color': '#37373D', 'text_color': 'white', 'font': ('', 10),
                         'highlightcolor': '#52d66c', 'hover': True, 'socket_color': 'green', 'socket_hover_color': 'grey50',
                         'x': None, 'y': None, 'multiside': False, 'output_socket_color': 'green', 'click_command': None,
-                        'socket_hover': True, 'num': None}
+                        'socket_hover': True, 'num': None, 'none_inputs': False}
 
         args.pop("canvas")
         args.pop("self")

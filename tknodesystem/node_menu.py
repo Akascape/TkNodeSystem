@@ -159,9 +159,9 @@ class NodeMenu(customtkinter.CTkToplevel):
         
     def _iconify(self, x=None, y=None):
         self.focus_set()
-        self.search_entry.focus_set()
         self._deiconify()
         if self.focus_something: self.node[0].focus_set()
+        self.search_entry.focus_set()
         self.place_dropdown(x,y)
 
     def _attach_key_press(self, command):

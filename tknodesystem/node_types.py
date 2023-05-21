@@ -138,7 +138,7 @@ class NodeValue(Node):
 class NodeOperation(Node):
     def __init__(self, canvas, width=100, height=None, inputs=2, border_color='white', text=None,
                  socket_radius=8, corner_radius=25, border_width=0, fg_color='#37373D', text_color='white', font=("",10),
-                 highlightcolor='#52d66c', hover=True, socket_color="green", socket_hover_color="grey50", x=0, y=0,
+                 highlightcolor='#52d66c', hover=True, socket_color="green", socket_hover_color="grey50", x=0, y=0, none_inputs=False,
                  multiside=False, command=None, output_socket_color="green", click_command=None, socket_hover=True, num=None):
 
         self.text = text
@@ -190,6 +190,7 @@ class NodeOperation(Node):
         self.socket_colors = []
         self.connected_node = set()
         self.connected_node_first = None
+        self.none_values = none_inputs
         x_pos = x
         y_pos = y
             
@@ -224,6 +225,7 @@ class NodeOperation(Node):
         self.cellinput5 = None
         self.celloutput = None
         self.socket_nums = []
+        self.values_args = []
         
         self.output_ = NodeSocket(canvas, radius=socket_radius, center=(width+(width/2),height),
                                   fg_color=output_socket_color, hover_color=socket_hover_color, socket_num=num[0] if num else None,
@@ -424,26 +426,26 @@ class NodeOperation(Node):
                      self.cellinput3,
                      self.cellinput4,
                      self.cellinput5]
-        values_args = []
+        self.values_args = []
         if self.command:
             for i in arguments[0:self.inputs]:
                 if i is None:
-                    self.output_.value = None
-                    break
+                    self.values_args.append(None)
                 else:
-                    self.output_.value = 1
-                    values_args.append(i.output_.value)
-                    
-            if self.output_.value:
-                for i in values_args:
+                    self.values_args.append(i.output_.value)
+            
+            if not self.none_values:
+                for i in self.values_args:
                     if i is None:
                         self.output_.value = None
                         break
                     else:
                         self.output_.value = 1
-                        
-                if self.output_.value:
-                    self.output_.value = self.command(*values_args[0:self.inputs])
+            else:
+                self.output_.value = 1
+                
+            if self.output_.value:
+                self.output_.value = self.command(*self.values_args[0:self.inputs])
         else:
             self.output_.value = None
 
@@ -454,6 +456,9 @@ class NodeOperation(Node):
     def get(self):
         """ get the current value of node """
         return self.output_.value
+    
+    def get_inputs(self):
+        return self.values_args
     
     def destroy(self):
         if self.ID not in self.canvas.find_all(): return
