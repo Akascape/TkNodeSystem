@@ -8,7 +8,7 @@
 - Multiple nodes and inputs
 - **Save/Load** node trees
 - Canvas with **drag and zoom** ability
-- Customizable options
+- Customizable nodes and options
 - Built-in **Node menu**
 
 ## Installation
@@ -45,7 +45,7 @@ Full documentation can be found in the **Wiki** page
 [<img src="https://img.shields.io/badge/View-Docs-informational?&color=c8ab09&style=for-the-badge" width="150">](https://github.com/Akascape/TkNodeSystem/wiki)
 
 ## Examples
-Examples are given in the `examples` folder
+Examples are given in the [`examples`](https://github.com/Akascape/TkNodeSystem/tree/main/examples) folder
 ![Example App](https://github.com/Akascape/TkNodeSystem/assets/89206401/ea818333-c979-4402-bc7c-8850930dc087)
 
 ### Bug Fixes
