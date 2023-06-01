@@ -2,11 +2,12 @@ import __main__
 from .node import Node
 from .node_socket import NodeSocket
 from .node_args import Args
+import warnings
 
 class NodeValue(Node):
     def __init__(self, canvas, width=100, height=50, value=0, border_color='white', text=None, corner_radius=25,
                  border_width=0, fg_color='#37373D', text_color='white', font=("",10), socket_radius=8, socket_hover=True,
-                 socket_color="green", socket_hover_color="grey50", highlightcolor='#52d66c', hover=True,
+                 socket_color="green", socket_hover_color="grey50", highlightcolor='#52d66c', hover=True, justify="center",
                  click_command=None, side="right", x=0, y=0, num=None):
 
         self.text = text
@@ -21,7 +22,7 @@ class NodeValue(Node):
                 self.args.update({"click_command": click_command.__name__})
             else:
                 click_command = None
-                print("Warning: currently <lamba function> cannot be saved and loaded, please use local function instead")
+                warnings.warn("Warning: currently <lamba function> cannot be saved and loaded, please use any local function instead")
             
         if self.text is None:
             self.text = f"Input{self.canvas.input_num}"
@@ -37,7 +38,7 @@ class NodeValue(Node):
         
         super().__init__(canvas=canvas, width=width, height=height, center=(width,height), text=str(self.text),
                          border_width=border_width, border_color=border_color, fg_color=fg_color, corner_radius=corner_radius,
-                         text_color=text_color, font=font, highlightcolor=highlightcolor, hover=hover,
+                         text_color=text_color, font=font, highlightcolor=highlightcolor, hover=hover, justify=justify,
                          click_command=click_command)
 
         if side=="left":
@@ -136,7 +137,7 @@ class NodeValue(Node):
             raise ValueError("This option is not configurable:" + list(kwargs.keys())[0])
 
 class NodeOperation(Node):
-    def __init__(self, canvas, width=100, height=None, inputs=2, border_color='white', text=None,
+    def __init__(self, canvas, width=100, height=None, inputs=2, border_color='white', text=None, justify="center", hover_text=None,
                  socket_radius=8, corner_radius=25, border_width=0, fg_color='#37373D', text_color='white', font=("",10),
                  highlightcolor='#52d66c', hover=True, socket_color="green", socket_hover_color="grey50", x=0, y=0, none_inputs=False,
                  multiside=False, command=None, output_socket_color="green", click_command=None, socket_hover=True, num=None):
@@ -144,6 +145,7 @@ class NodeOperation(Node):
         self.text = text
         self.canvas = canvas
         self.type = 'NodeOperation'
+        self.hover_text = {} if hover_text is None else hover_text
         
         if self.text is None:
             self.text = f"Function{self.canvas.operation_num}"
@@ -152,9 +154,11 @@ class NodeOperation(Node):
 
         if border_width==0:
             border_color = fg_color
-            
-        self.args = Args.func_args(locals())
-        
+
+        args = locals()
+        args['hover_text'] = self.hover_text
+        self.args = Args.func_args(args)
+
         if command:
             if command!="<lambda>":            
                 if type(command) is str:
@@ -162,7 +166,7 @@ class NodeOperation(Node):
                 self.args.update({"command": command.__name__})
             else:
                 command = None
-                print("Warning: currently <lamba function> cannot be saved and loaded, please use local function instead")
+                warnings.warn("Warning: currently <lamba function> cannot be saved and loaded, please use any local function instead")
         if click_command:
             if click_command!="<lambda>":
                 if type(click_command) is str:
@@ -170,14 +174,14 @@ class NodeOperation(Node):
                 self.args.update({"click_command": click_command.__name__})
             else:
                 click_command = None
-                print("Warning: currently <lamba function> cannot be saved and loaded, please use local function instead")
+                warnings.warn("Warning: currently <lamba function> cannot be saved and loaded, please use any local function instead")
                 
         self.command = command
         
         if height is None:
             height = 50 + (inputs*10)
             
-        super().__init__(canvas=canvas, width=width, height=height, center=(width,height), 
+        super().__init__(canvas=canvas, width=width, height=height, center=(width,height), justify=justify,
                          border_width=border_width, fg_color=fg_color, border_color=border_color,
                          text_color=text_color, font=font, click_command=click_command, corner_radius=corner_radius,
                          highlightcolor=highlightcolor, text=str(self.text), hover=hover)
@@ -191,6 +195,7 @@ class NodeOperation(Node):
         self.connected_node = set()
         self.connected_node_first = None
         self.none_values = none_inputs
+        
         x_pos = x
         y_pos = y
             
@@ -235,7 +240,7 @@ class NodeOperation(Node):
         
         center = (width/2, y * x + height/2)     
         self.input_1 = NodeSocket(canvas, radius=socket_radius, center=center, fg_color=self.socket_colors[0],
-                                  hover_color=socket_hover_color, border_width=border_width,
+                                  hover_color=socket_hover_color, border_width=border_width, hover=socket_hover,
                                   border_color=border_color, socket_num=num[1] if num else None)
         
         id_list = [self.output_.ID, self.input_1.ID]
@@ -293,7 +298,10 @@ class NodeOperation(Node):
         self.bind_all_to_movement()
         self.id_list = id_list
         self.canvas.bind_all("<Delete>", lambda e: self.destroy() if self.signal else None, add="+")
-   
+
+        for i in self.hover_text:
+            self.config_socket(**self.hover_text[i])
+       
         for j in range(self.canvas.gain_in):
             for i in self.allIDs:
                 self.canvas.scale(i, 0, 0, 1.1, 1.1)
@@ -478,7 +486,44 @@ class NodeOperation(Node):
             return True
         else:
             return False
-        
+
+    def config_socket(self, index: int, hover_text: str=None, hover_text_color=None, hover_bg=None, **kwargs):
+        if index==1:
+            socket = self.input_1
+        elif index==2:
+            socket = self.input_2
+        elif index==3:
+            socket = self.input_3
+        elif index==4:
+            socket = self.input_4
+        elif index==5:
+            socket = self.input_5
+        else:
+            return
+
+        kwarg_args = {}
+        for i in kwargs:
+            kwarg_args  = {i: kwargs[i]}
+            
+        self.hover_text[str(index)] = {'index': index, 'hover_text': hover_text, 'hover_text_color': hover_text_color, 'hover_bg': hover_bg, **kwarg_args}
+
+        if hover_text:
+            socket.hover_message = True
+            socket.msg.set(hover_text)
+        else:
+            socket.hover_message = False
+            
+        if hover_text_color:
+            socket.hover_text.configure(fg=hover_text_color)
+            
+        if hover_bg:
+            socket.hover_text.configure(bg=hover_bg)
+            
+        if "socket_color" in kwargs:
+            socket.configure(fg_color=kwargs.pop("socket_color"))
+
+        self.configure(**kwargs)
+            
     def configure(self, **kwargs):
         """ configure options """
         
@@ -544,7 +589,7 @@ class NodeOperation(Node):
             raise ValueError("This option is not configurable:" + list(kwargs.keys())[0])
         
 class NodeCompile(Node):
-    def __init__(self, canvas, width=100, height=50, border_color='white', text="Compile", socket_radius=8, corner_radius=25, x=0, y=0,
+    def __init__(self, canvas, width=100, height=50, border_color='white', text="Compile", socket_radius=8, corner_radius=25, x=0, y=0, justify="center",
                  border_width=0, fg_color='#37373D',text_color='white', font=("",10), highlightcolor='#52d66c', hover=True, socket_hover=True,
                  socket_color="green", socket_hover_color="grey50", show_value=True, command=None, click_command=None, side="left", num=None):
 
@@ -566,7 +611,7 @@ class NodeCompile(Node):
                 self.args.update({"command": command.__name__})
             else:
                 command = None
-                print("Warning: currently <lamba function> cannot be saved and loaded, please use local function instead")
+                warnings.warn("Warning: currently <lamba function> cannot be saved and loaded, please use any local function instead")
         if click_command:
             if click_command!="<lambda>":
                 if type(click_command) is str:
@@ -574,10 +619,10 @@ class NodeCompile(Node):
                 self.args.update({"click_command": click_command.__name__})
             else:
                 click_command = None
-                print("Warning: currently <lamba function> cannot be saved and loaded, please use local function instead")
+                warnings.warn("Warning: currently <lamba function> cannot be saved and loaded, please use any local function instead")
                 
         super().__init__(canvas=canvas, width=width, height=height, center=(width,height), text=str(text), corner_radius=corner_radius,
-                         border_width=border_width, fg_color=fg_color, border_color=border_color, hover=hover,
+                         border_width=border_width, fg_color=fg_color, border_color=border_color, hover=hover, justify=justify,
                          text_color=text_color, font=font, click_command=click_command, highlightcolor=highlightcolor)
 
         self.line1 = None

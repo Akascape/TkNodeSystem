@@ -1,5 +1,5 @@
 class Node:
-    def __init__(self, canvas, width=50, height=50, border_color='white', border_width=0,
+    def __init__(self, canvas, width=50, height=50, border_color='white', border_width=0, justify="center",
                  fg_color='#37373D', center=(100,50), text='', text_color='white', corner_radius=25,
                  font=("",10), click_command=None, highlightcolor='#52d66c', hover=True):
         
@@ -12,6 +12,7 @@ class Node:
         self.text_color = text_color
         self.corner_radius = corner_radius
         self.font = font
+        self.justify = justify
         self.text = text
         self.center = center
         self.click_command = click_command
@@ -30,7 +31,7 @@ class Node:
                                               radius=self.corner_radius, outline=self.node_outline_color, fill=self.node_color,
                                               width=self.node_outline_thickness)
         
-        self.IDtext = self.canvas.create_text(self.center, fill=self.text_color, justify="center", font=self.font, text=self.text)
+        self.IDtext = self.canvas.create_text(self.center, fill=self.text_color, justify=self.justify, font=self.font, text=self.text)
         self.allIDs = [self.ID, self.IDtext]
         self.auxlist = [self.ID, self.IDtext]
 

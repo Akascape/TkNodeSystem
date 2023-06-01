@@ -1,3 +1,5 @@
+import tkinter
+
 class NodeSocket:
     def __init__(self, canvas, radius=10, center=(50,50), value=0, border_color='white',
                  border_width=1, fg_color='green', hover_color='red', hover=True, socket_num=None):
@@ -9,6 +11,7 @@ class NodeSocket:
         self.fg_color = fg_color
         self.hover_color = hover_color
         self.hover = hover
+        self.hover_message = False
         self.live_connection = False
         
         self.create(border_color, border_width, self.fg_color)
@@ -18,7 +21,11 @@ class NodeSocket:
             self.canvas.socket_num = socket_num
         else:
             self.socket_num = self.canvas.socket_num
-   
+  
+        self.msg = tkinter.StringVar()
+        self.hover_text = tkinter.Message(self.canvas, textvariable=self.msg, aspect=1000,
+                                          highlightthickness=0, borderwidth=0, bg="grey20", fg="white")
+        
         self.update()
         
     def create(self, border_color, border_width, connecter_color):
@@ -42,10 +49,15 @@ class NodeSocket:
         
     def enter_socket(self, event):
         if self.hover: self.canvas.itemconfigure(self.ID, fill=self.hover_color)
-        
+        if self.hover_message:
+            x_pos = self.cords[0]-self.hover_text.winfo_reqwidth()-3
+            y_pos = self.center[1]-self.hover_text.winfo_reqheight()/2
+            self.hover_text.place(x=x_pos, y=y_pos)
+            
     def leave_socket(self, event):
         if self.hover: self.canvas.itemconfigure(self.ID, fill=self.fg_color)
-        
+        if self.hover_message: self.hover_text.place_forget()
+            
     def hide(self):
         self.canvas.itemconfigure(self.ID, state="hidden")
         

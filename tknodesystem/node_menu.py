@@ -52,7 +52,7 @@ class NodeMenu(customtkinter.CTkToplevel):
             self.padding = 20
             self.attach.bind("<Double-Button-3>", self.popup, add="+")
             self.bind("<FocusOut>", lambda e: self._withdraw())
-            
+
         self.fg_color = customtkinter.ThemeManager.theme["CTkFrame"]["fg_color"] if fg_color is None else fg_color
         self.scroll_button_color = customtkinter.ThemeManager.theme["CTkScrollbar"]["button_color"] if scrollbar_button_color is None else scrollbar_button_color
         self.scroll_hover_color = customtkinter.ThemeManager.theme["CTkScrollbar"]["button_hover_color"] if scrollbar_button_hover_color is None else scrollbar_button_hover_color
@@ -192,7 +192,8 @@ class NodeMenu(customtkinter.CTkToplevel):
             self.no_match.pack_forget()
             for key in self.node.keys():
                 self.node[key].pack(fill="x", pady=5, padx=(self.padding,0))
-           
+        self.frame._parent_canvas.yview_moveto(0.0)
+        
     def _deiconify(self):
         if self.button_num>0:
             self.deiconify()

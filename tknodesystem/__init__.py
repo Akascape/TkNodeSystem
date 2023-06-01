@@ -5,7 +5,7 @@ Homepage: https://github.com/Akascape/TkNodeSystem
 License: MIT
 """
 
-__version__ = '0.4'
+__version__ = '0.5'
 
 from .node_types import NodeValue, NodeOperation, NodeCompile
 from .node_canvas import NodeCanvas
