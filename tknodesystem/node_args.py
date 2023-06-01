@@ -38,7 +38,6 @@ class Args():
         args.pop("y")
         args.pop("click_command")
         args.pop("num")
-
         new_args = {}
         
         for i in args.keys():
