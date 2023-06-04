@@ -8,10 +8,11 @@ class NodeWire():
         self.IDc = self.canvas.IDc
         self.wire_color = wire_color
         self.wire_width = wire_width
-        self.canvas.line_ids.append(self)
+        self.canvas.line_ids.add(self)
         self.dash = (2,4) if dash else ()
         self.hover_color = wire_hover_color
-    
+        self.connected = True
+        
         if self.firstcell:
             self.create()
             self.update()
@@ -63,24 +64,21 @@ class NodeWire():
             self.secondcell.connect_input(self.ID, input_num)
         else:
             self.secondcell.connect_input(None)
- 
+            
     def update(self):
         """ update the coordinates of line based on the socket position """
-        
         all_items = self.canvas.find_all()
         if self.firstcell.ID not in all_items or self.secondcell.ID not in all_items:
             self.canvas.delete(self.ID)
-            self.canvas.line_ids.remove(self)
-        else:
-            if self.ID not in all_items: return
-            self.x1, self.y1 = self.firstcell.output_.center
-            if self.IDc == 'input1': self.x2, self.y2 = self.secondcell.input_1.center
-            if self.IDc == 'input2': self.x2, self.y2 = self.secondcell.input_2.center
-            if self.IDc == 'input3': self.x2, self.y2 = self.secondcell.input_3.center
-            if self.IDc == 'input4': self.x2, self.y2 = self.secondcell.input_4.center
-            if self.IDc == 'input5': self.x2, self.y2 = self.secondcell.input_5.center
-            self.canvas.coords(self.ID, self.x1, self.y1, self.x2, self.y2)
-            self.canvas.after(10, self.update)
+            self.connected = False
+        if self.ID not in all_items: return
+        self.x1, self.y1 = self.firstcell.output_.center
+        if self.IDc == 'input1': self.x2, self.y2 = self.secondcell.input_1.center
+        if self.IDc == 'input2': self.x2, self.y2 = self.secondcell.input_2.center
+        if self.IDc == 'input3': self.x2, self.y2 = self.secondcell.input_3.center
+        if self.IDc == 'input4': self.x2, self.y2 = self.secondcell.input_4.center
+        if self.IDc == 'input5': self.x2, self.y2 = self.secondcell.input_5.center
+        self.canvas.coords(self.ID, self.x1, self.y1, self.x2, self.y2)
 
     def configure(self, **kwargs):
         if "wire_color" in kwargs:

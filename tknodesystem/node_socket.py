@@ -44,7 +44,6 @@ class NodeSocket:
         try:
             self.cords = self.canvas.coords(self.ID)
             self.center = (self.cords[0]+self.cords[2])/2, (self.cords[1]+self.cords[3])/2
-            self.canvas.after(10, self.update)
         except: None
         
     def enter_socket(self, event):
@@ -66,7 +65,6 @@ class NodeSocket:
 
     def connect_wire(self):
         """ make a dummy wire """
-  
         if self.live_connection: return
       
         self.x1, self.y1 = self.center
@@ -85,7 +83,6 @@ class NodeSocket:
         self.canvas.delete(self.wireID)
         self.wire_exist = False
         self.live_connection = False
-        self.canvas.connect_wire = True
         
     def mouse_move(self):
         """ connect the dummy wire with mouse """

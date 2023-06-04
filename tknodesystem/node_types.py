@@ -8,7 +8,7 @@ class NodeValue(Node):
     def __init__(self, canvas, width=100, height=50, value=0, border_color='white', text=None, corner_radius=25,
                  border_width=0, fg_color='#37373D', text_color='white', font=("",10), socket_radius=8, socket_hover=True,
                  socket_color="green", socket_hover_color="grey50", highlightcolor='#52d66c', hover=True, justify="center",
-                 click_command=None, side="right", x=0, y=0, num=None):
+                 click_command=None, side="right", x=0, y=0, num=None, fixed=False):
 
         self.text = text
         self.canvas = canvas
@@ -54,7 +54,8 @@ class NodeValue(Node):
 
         self.bind_all_to_movement()
         self.canvas.tag_bind(self.output_.ID, '<Button-1>', self.connect_output)
-        self.canvas.bind_all("<Delete>", lambda e: self.destroy() if self.signal else None, add="+")
+        if not fixed:
+            self.canvas.bind_all("<Delete>", lambda e: self.destroy() if self.signal else None, add="+")
         self.socket_nums = self.output_.socket_num
         
         for j in range(self.canvas.gain_in):
@@ -140,7 +141,7 @@ class NodeOperation(Node):
     def __init__(self, canvas, width=100, height=None, inputs=2, border_color='white', text=None, justify="center", hover_text=None,
                  socket_radius=8, corner_radius=25, border_width=0, fg_color='#37373D', text_color='white', font=("",10),
                  highlightcolor='#52d66c', hover=True, socket_color="green", socket_hover_color="grey50", x=0, y=0, none_inputs=False,
-                 multiside=False, command=None, output_socket_color="green", click_command=None, socket_hover=True, num=None):
+                 multiside=False, command=None, output_socket_color="green", click_command=None, socket_hover=True, num=None, fixed=False):
 
         self.text = text
         self.canvas = canvas
@@ -297,7 +298,8 @@ class NodeOperation(Node):
         self.allIDs = self.allIDs + id_list
         self.bind_all_to_movement()
         self.id_list = id_list
-        self.canvas.bind_all("<Delete>", lambda e: self.destroy() if self.signal else None, add="+")
+        if not fixed:
+            self.canvas.bind_all("<Delete>", lambda e: self.destroy() if self.signal else None, add="+")
 
         for i in self.hover_text:
             self.config_socket(**self.hover_text[i])
@@ -590,7 +592,7 @@ class NodeOperation(Node):
         
 class NodeCompile(Node):
     def __init__(self, canvas, width=100, height=50, border_color='white', text="Compile", socket_radius=8, corner_radius=25, x=0, y=0, justify="center",
-                 border_width=0, fg_color='#37373D',text_color='white', font=("",10), highlightcolor='#52d66c', hover=True, socket_hover=True,
+                 border_width=0, fg_color='#37373D',text_color='white', font=("",10), highlightcolor='#52d66c', hover=True, socket_hover=True, fixed=False,
                  socket_color="green", socket_hover_color="grey50", show_value=True, command=None, click_command=None, side="left", num=None):
 
         self.canvas = canvas
@@ -652,7 +654,8 @@ class NodeCompile(Node):
         self.fixed = True
         self.bind_all_to_movement()
         self.canvas.tag_bind(self.input_1.ID, '<Button-1>', self.connect_input)
-        self.canvas.bind_all("<Delete>", lambda e: self.destroy() if self.signal else None, add="+")
+        if not fixed:
+            self.canvas.bind_all("<Delete>", lambda e: self.destroy() if self.signal else None, add="+")
         
         for j in range(self.canvas.gain_in):
             for i in self.allIDs:

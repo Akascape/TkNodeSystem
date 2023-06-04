@@ -20,9 +20,9 @@ class Node:
         self.signal = False
         self.hover = hover
         self.hover_color = highlightcolor
-        
         self.create()
-       
+        self.canvas.node_list.add(self)
+        
     def create(self):
         """ create round rectangular frame with text """
         
@@ -71,12 +71,35 @@ class Node:
             self.canvas.tag_raise(id_)
             
         self.xy_set = (event.x, event.y)
+
+        self.update_sockets()
         
+    def update_sockets(self):
+        """ update the coordinates of sockets and lines """
+        self.output_.update()
+        try:
+            self.input_1.update()
+            self.input_2.update()
+            self.input_3.update()
+            self.input_4.update()
+            self.input_5.update()
+        except AttributeError: None
+
+        for i in self.canvas.line_ids:
+            i.update()
+
+        deleted = set()
+        for i in self.canvas.line_ids:
+            if not i.connected:
+                deleted.add(i)
+        self.canvas.line_ids = self.canvas.line_ids.difference(deleted)
+ 
     def move(self, x, y):
         for id_ in self.allIDs:
             self.canvas.move(id_, x, y) 
             self.canvas.tag_raise(id_)
-    
+        self.update_sockets()
+        
     def enter_node(self, event):
         if self.hover:
             self.canvas.itemconfigure(self.ID, outline=self.hover_color, width=self.node_outline_thickness+1)
@@ -89,7 +112,10 @@ class Node:
     
     def destroy(self):
         self.canvas.delete(self.ID, self.IDtext)
-        
+        self.canvas.node_list.remove(self)
+        for i in self.canvas.line_ids:
+            i.update()
+            
     def configure(self, **kwargs):
         """ configure options """
         

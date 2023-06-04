@@ -13,7 +13,6 @@ class NodeCanvas(tkinter.Canvas):
         super().__init__(master, bg=bg, width=width, height=height, bd=0, highlightthickness=0, **kwargs)
 
         self.wire_color = wire_color
-        self._wire_color = wire_color
         self.wire_width = wire_width
         self.wire_hover_color = wire_hover_color
         self.dash = wire_dash
@@ -29,7 +28,8 @@ class NodeCanvas(tkinter.Canvas):
         self.connect_wire = True
         self.line_list = set()
         self.obj_list = set()
-        self.line_ids = []
+        self.line_ids = set()
+        self.node_list = set()
         self.gain_in = 1
         self.gain_out = 1
         self.set_grid_image(grid_image)
@@ -88,6 +88,9 @@ class NodeCanvas(tkinter.Canvas):
         for i in self.all_items:
             self.move(i, event.x-self.xy_set[0], event.y-self.xy_set[1])        
         self.xy_set = (event.x, event.y)
+
+        for i in self.node_list:
+            i.update_sockets()
             
     def do_zoom(self, event, delta=None):
         """ zoom in/out the canvas by changing the coordinates of all canvas items """
@@ -106,6 +109,9 @@ class NodeCanvas(tkinter.Canvas):
             for i in self.all_items:
                 self.scale(i, event.x, event.y, 0.9, 0.9)
             self.gain_out +=1
+
+        for i in self.node_list:
+            i.update_sockets()
             
     def conectcells(self):
         """ connection data for the inputs of any operation node """
@@ -143,7 +149,6 @@ class NodeCanvas(tkinter.Canvas):
         
         if "wire_color" in kwargs:
             self.wire_color = kwargs.pop("wire_color")
-            self._wire_color = self.wire_color
             for i in self.line_ids:
                 i.configure(wire_color=self.wire_color)
         if "wire_width" in kwargs:
@@ -192,7 +197,6 @@ class NodeCanvas(tkinter.Canvas):
   
         self.clear()
         self.connect_wire = False
-        self.wire_color = self.bg  # hides an unwanted glitch
         
         obj_type_dict = {'NodeValue': NodeValue,
                          'NodeOperation': NodeOperation,
@@ -270,6 +274,5 @@ class NodeCanvas(tkinter.Canvas):
                     self.clickcount = 1
                     j.connect_input(None)
                     
-        self.configure(wire_color=self._wire_color) # hides an unwanted glitch
         self.connect_wire = True    
- 
+
