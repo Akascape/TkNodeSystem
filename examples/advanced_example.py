@@ -42,7 +42,10 @@ def add_slider(num, node):
     def update(e):
         node.update()
         label.configure(text=f"{node.text}: {round(e,2)}")
-                               
+        
+    for i in sliders.values():
+        i.pack_forget()
+        
     sliders[num] = customtkinter.CTkSlider(frame_right, from_=0, to=10, command=lambda e: update(e))
     sliders[num].pack(expand=True, fill="x", padx=20, pady=5, side="bottom")
     sliders[num].set(1)
