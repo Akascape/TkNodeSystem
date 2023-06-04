@@ -84,7 +84,7 @@ def show_image(output):
     """ compile operation: shows the output image """
 
     global img
-    label_height = 400
+    label_height = frame_right.winfo_height()
     ratio = output.size[1]/output.size[0]
     if ratio>1.5: ratio = 1.5
     if ratio<0.5: ratio = 0.5
