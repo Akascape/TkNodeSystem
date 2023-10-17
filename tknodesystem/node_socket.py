@@ -73,7 +73,7 @@ class NodeSocket:
         self.wireID = self.canvas.create_line(self.x1, self.y1, self.x2, self.y2, dash=self.canvas.dash,
                                               width=self.canvas.wire_width, fill=self.canvas.wire_color)
         self.canvas.tag_lower(self.wireID)
-        self.canvas.tag_lower(self.canvas.grid)
+        self.canvas.tag_lower(self.canvas.grid_bg)
         self.canvas.tag_bind(self.ID, "<ButtonPress>", lambda e: self.mouse_move(), add="+")
         self.canvas.tag_bind(self.wireID, "<Button-1>", lambda e: self.delete_wire(), add="+")
         if self.canvas.connect_wire: self.mouse_move()

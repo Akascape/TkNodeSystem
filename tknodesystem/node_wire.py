@@ -48,7 +48,7 @@ class NodeWire():
         self.ID = self.canvas.create_line(self.x1, self.y1, self.x2, self.y2, dash=self.dash, width=self.wire_width,
                                           activefill=self.hover_color, fill=self.wire_color, activewidth=self.wire_width)
         self.canvas.tag_lower(self.ID)
-        self.canvas.tag_lower(self.canvas.grid)
+        self.canvas.tag_lower(self.canvas.grid_bg)
         self.inputs = self.canvas.IDc
         self.canvas.tag_bind(self.ID, "<Double-Button-1>", lambda e: self.delete_line(self.inputs))
 

@@ -36,17 +36,17 @@ class NodeCanvas(tkinter.Canvas):
         
         if move:
             if sys.platform.startswith("darwin"):
-                self.tag_bind(self.grid, '<ButtonPress-3>', lambda e: self.getpos(e, 1))
-                self.tag_bind(self.grid, '<ButtonRelease-3>', lambda e: self.getpos(e, 0))
+                self.tag_bind(self.grid_bg, '<ButtonPress-3>', lambda e: self.getpos(e, 1))
+                self.tag_bind(self.grid_bg, '<ButtonRelease-3>', lambda e: self.getpos(e, 0))
             else:
-                self.tag_bind(self.grid, '<ButtonPress-2>', lambda e: self.getpos(e, 1))
-                self.tag_bind(self.grid, '<ButtonRelease-2>', lambda e: self.getpos(e, 0))
-            self.tag_bind(self.grid, "<B2-Motion>", self.move_grid)
+                self.tag_bind(self.grid_bg, '<ButtonPress-2>', lambda e: self.getpos(e, 1))
+                self.tag_bind(self.grid_bg, '<ButtonRelease-2>', lambda e: self.getpos(e, 0))
+            self.tag_bind(self.grid_bg, "<B2-Motion>", self.move_grid)
         
         if zoom:
             self.bind("<MouseWheel>", self.do_zoom)
-            self.tag_bind(self.grid, "<Button-4>", lambda e: self.do_zoom(e, 120))
-            self.tag_bind(self.grid, "<Button-5>", lambda e: self.do_zoom(e, -120))
+            self.tag_bind(self.grid_bg, "<Button-4>", lambda e: self.do_zoom(e, 120))
+            self.tag_bind(self.grid_bg, "<Button-5>", lambda e: self.do_zoom(e, -120))
             
     def set_grid_image(self, grid_image):
         """ set the grid image for the canvas """
@@ -64,10 +64,10 @@ class NodeCanvas(tkinter.Canvas):
                            
         self.image = self.image.subsample(1,1)
         try:
-            self.delete(self.grid)
+            self.delete(self.grid_bg)
         except: None
-        self.grid = self.create_image(self.image.width()/2, self.image.height()/2, image = self.image)   
-        self.tag_lower(self.grid)
+        self.grid_bg = self.create_image(self.image.width()/2, self.image.height()/2, image = self.image)   
+        self.tag_lower(self.grid_bg)
         
     def getpos(self, event, cursor):
         """ get the mouse position and change cursor style """
@@ -83,7 +83,7 @@ class NodeCanvas(tkinter.Canvas):
         """ move the contents of the canvas except the grid image """
         
         self.all_items = list(self.find_all())
-        self.all_items.pop(self.all_items.index(self.grid))
+        self.all_items.pop(self.all_items.index(self.grid_bg))
         
         for i in self.all_items:
             self.move(i, event.x-self.xy_set[0], event.y-self.xy_set[1])        
@@ -96,7 +96,7 @@ class NodeCanvas(tkinter.Canvas):
         """ zoom in/out the canvas by changing the coordinates of all canvas items """
         
         self.all_items = list(self.find_all())
-        self.all_items.pop(self.all_items.index(self.grid))
+        self.all_items.pop(self.all_items.index(self.grid_bg))
 
         if not delta:
             delta = event.delta
@@ -133,7 +133,7 @@ class NodeCanvas(tkinter.Canvas):
         """ clear the canvas except the grid image """
         
         self.all_items = list(self.find_all())
-        self.all_items.pop(self.all_items.index(self.grid))
+        self.all_items.pop(self.all_items.index(self.grid_bg))
         
         for i in self.all_items:
             self.delete(i)
