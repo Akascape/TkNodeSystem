@@ -38,10 +38,11 @@ class NodeCanvas(tkinter.Canvas):
             if sys.platform.startswith("darwin"):
                 self.tag_bind(self.grid_bg, '<ButtonPress-3>', lambda e: self.getpos(e, 1))
                 self.tag_bind(self.grid_bg, '<ButtonRelease-3>', lambda e: self.getpos(e, 0))
+                self.tag_bind(self.grid_bg, "<B3-Motion>", self.move_grid)
             else:
                 self.tag_bind(self.grid_bg, '<ButtonPress-2>', lambda e: self.getpos(e, 1))
                 self.tag_bind(self.grid_bg, '<ButtonRelease-2>', lambda e: self.getpos(e, 0))
-            self.tag_bind(self.grid_bg, "<B2-Motion>", self.move_grid)
+                self.tag_bind(self.grid_bg, "<B2-Motion>", self.move_grid)
         
         if zoom:
             self.bind("<MouseWheel>", self.do_zoom)
@@ -73,11 +74,11 @@ class NodeCanvas(tkinter.Canvas):
         """ get the mouse position and change cursor style """
         
         self.xy_set = (event.x, event.y)
-
+  
         if cursor:
-            self.config(cursor="fleur")
+            self.config(cursor="fleur", width=self.winfo_reqwidth(), height=self.winfo_reqheight())
         else:
-            self.config(cursor="arrow")
+            self.config(cursor="arrow", width=self.winfo_reqwidth(), height=self.winfo_reqheight())
         
     def move_grid(self, event):
         """ move the contents of the canvas except the grid image """
@@ -143,6 +144,9 @@ class NodeCanvas(tkinter.Canvas):
         self.compile_num = 0
         self.socket_num = 0
         self.line_list = set()
+        self.obj_list = set()
+        self.line_ids = set()
+        self.node_list = set()
         
     def configure(self, **kwargs):
         """ configure options """
@@ -221,58 +225,34 @@ class NodeCanvas(tkinter.Canvas):
                 func_nodes.append(obj)
             elif obj_type.split()[0]=="NodeCompile":
                 comp_nodes.append(obj)
-
             self.obj_list.add(obj)
-        
-        for i in value_nodes:
-            i.connect_output(None)
-            for j in func_nodes:
-                try:
+
+        for nodes in [value_nodes, func_nodes, comp_nodes]:
+            for i in nodes:
+                i.connect_output(None)
+                for j in func_nodes:
+                    try:
+                        if [self.outputcell.output_.socket_num, j.input_1.socket_num] in line_list:
+                            self.clickcount = 1
+                            j.connect_input(j.line1, 'input1')
+                        if [self.outputcell.output_.socket_num, j.input_2.socket_num] in line_list:
+                            self.clickcount = 1
+                            j.connect_input(j.line2, 'input2')
+                        if [self.outputcell.output_.socket_num, j.input_3.socket_num] in line_list:
+                            self.clickcount = 1
+                            j.connect_input(j.line3, 'input3')
+                        if [self.outputcell.output_.socket_num, j.input_4.socket_num] in line_list:
+                            self.clickcount = 1
+                            j.connect_input(j.line4, 'input4')
+                        if [self.outputcell.output_.socket_num, j.input_5.socket_num] in line_list:
+                            self.clickcount = 1
+                            j.connect_input(j.line5, 'input5')
+                    except AttributeError: None
+                for j in comp_nodes:
                     if [self.outputcell.output_.socket_num, j.input_1.socket_num] in line_list:
                         self.clickcount = 1
-                        j.connect_input(j.line1, 'input1')
-                    if [self.outputcell.output_.socket_num, j.input_2.socket_num] in line_list:
-                        self.clickcount = 1
-                        j.connect_input(j.line2, 'input2')
-                    if [self.outputcell.output_.socket_num, j.input_3.socket_num] in line_list:
-                        self.clickcount = 1
-                        j.connect_input(j.line3, 'input3')
-                    if [self.outputcell.output_.socket_num, j.input_4.socket_num] in line_list:
-                        self.clickcount = 1
-                        j.connect_input(j.line4, 'input4')
-                    if [self.outputcell.output_.socket_num, j.input_5.socket_num] in line_list:
-                        self.clickcount = 1
-                        j.connect_input(j.line5, 'input5')
-                except AttributeError: None
-            for j in comp_nodes:
-                if [self.outputcell.output_.socket_num, j.input_1.socket_num] in line_list:
-                    self.clickcount = 1
-                    j.connect_input(None)
-                        
-        for i in func_nodes:
-            i.connect_output(None)
-            for j in func_nodes:
-                try:
-                    if [self.outputcell.output_.socket_num, j.input_1.socket_num] in line_list:
-                        self.clickcount = 1
-                        j.connect_input(j.line1, 'input1')
-                    if [self.outputcell.output_.socket_num, j.input_2.socket_num] in line_list:
-                        self.clickcount = 1
-                        j.connect_input(j.line2, 'input2')
-                    if [self.outputcell.output_.socket_num, j.input_3.socket_num] in line_list:
-                        self.clickcount = 1
-                        j.connect_input(j.line3, 'input3')
-                    if [self.outputcell.output_.socket_num, j.input_4.socket_num] in line_list:
-                        self.clickcount = 1
-                        j.connect_input(j.line4, 'input4')
-                    if [self.outputcell.output_.socket_num, j.input_5.socket_num] in line_list:
-                        self.clickcount = 1
-                        j.connect_input(j.line5, 'input5')
-                except AttributeError: None
-            for j in comp_nodes:
-                if [self.outputcell.output_.socket_num, j.input_1.socket_num] in line_list:
-                    self.clickcount = 1
-                    j.connect_input(None)
+                        j.connect_input(None)
                     
+
         self.connect_wire = True    
 

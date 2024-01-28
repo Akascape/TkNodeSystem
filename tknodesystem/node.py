@@ -115,21 +115,29 @@ class Node:
         self.canvas.node_list.remove(self)
         for i in self.canvas.line_ids:
             i.update()
-            
+
+    def bind(self, binding, command, add="+"):
+        for i in self.auxlist:
+            self.canvas.tag_bind(i, binding, command, add)
+        
     def configure(self, **kwargs):
         """ configure options """
         
         if "fg_color" in kwargs:
-            self.canvas.itemconfig(self.ID, fill=kwargs.pop("fg_color"))
+            self.node_color = kwargs.pop("fg_color")
+            self.canvas.itemconfig(self.ID, fill=self.node_color)
         if "highlightcolor" in kwargs:
             self.hover_color = kwargs.pop("highlightcolor")
         if "hover" in kwargs:
             self.hover = kwargs.pop("hover")
         if "text" in kwargs:
-            self.canvas.itemconfig(self.IDtext, text=kwargs.pop("text"))
+            self.text = kwargs.pop("text")
+            self.canvas.itemconfig(self.IDtext, text=self.text)
         if "text_color" in kwargs:
-            self.canvas.itemconfig(self.IDtext, fill=kwargs.pop("text_color"))
+            self.text_color = kwargs.pop("text_color")
+            self.canvas.itemconfig(self.IDtext, fill=self.text_color)
         if "font" in kwargs:
-            self.canvas.itemconfig(self.IDtext, font=kwargs.pop("font"))
+            self.font = kwargs.pop("font")
+            self.canvas.itemconfig(self.IDtext, font=self.font)
         if len(kwargs)>0:
             raise ValueError("This option is not configurable:" + list(kwargs.keys())[0])
