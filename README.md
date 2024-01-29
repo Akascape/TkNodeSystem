@@ -1,6 +1,6 @@
 ![title](https://github.com/Akascape/TkNodeSystem/assets/89206401/a84cb60a-cc6f-4609-8452-3ff4fcd0c46b)
 
-**Simple Node System (DAG) in tkinter python!**
+**Advanced Node System (DAG) in tkinter python!**
 
 ## Feature
 - Lightweight library
@@ -47,13 +47,25 @@ Full documentation can be found in the **Wiki** page
 ## Examples
 Examples can be found in the [`examples`](https://github.com/Akascape/TkNodeSystem/tree/main/examples) folder.
 
+<div align="center">
+  
 ### Level: Beginner
+Maths with tknodes
+
+![Example1](https://github.com/Akascape/TkNodeSystem/assets/89206401/9bb709fa-78e8-4db0-b5f1-8848fd32aa81)
 
 ### Level: Intermediate
-
-![Example App](https://github.com/Akascape/TkNodeSystem/assets/89206401/ea818333-c979-4402-bc7c-8850930dc087)
+Image manipulation with PIL
+  
+![Example2](https://github.com/Akascape/TkNodeSystem/assets/89206401/ea818333-c979-4402-bc7c-8850930dc087)
 
 ### Level: Advanced
+3D Viewer
+
+![Screenshot](https://github.com/Akascape/TkNodeSystem/assets/89206401/83e5d356-947e-4737-9f92-487a2cfc7d3f)
+![Screenshot](https://github.com/Akascape/TkNodeSystem/assets/89206401/a5695e72-c739-41ce-a700-20c3b4bd052b)
+
+</div>
 
 ### Bug Fixes
 This library is at **experimental stage**, so there must be some bugs which can appear randomly.
