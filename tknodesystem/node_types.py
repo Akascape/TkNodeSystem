@@ -544,9 +544,9 @@ class NodeOperation(Node):
                     
                 if self.output_.value:
                     if self.pass_node:
-                        elf.output_.value = self.command(self, *self.values_args[0:self.inputs])
+                        self.output_.value = self.command(self, *self.values_args[0:self.inputs])
                     else:
-                        elf.output_.value = self.command(*self.values_args[0:self.inputs])
+                        self.output_.value = self.command(*self.values_args[0:self.inputs])
             else:
                 self.output_.value = None
 
