@@ -227,8 +227,9 @@ tab_num = 1
 root = customtkinter.CTk()
 root.title("3D Geometry Viewer")
 root.geometry("1200x550")
+customtkinter.deactivate_automatic_dpi_awareness()
 root.resizable(False, False)
-sv_ttk.set_theme("dark")
+
 geo = {}
 dialog_box = None
 global_side_color = "#ffffff"
@@ -259,5 +260,5 @@ style.layout("Tab", [('Notebook.tab', {'sticky': 'nswe', 'children':
 add_tab_button = customtkinter.CTkButton(notebook, width=30, text="+",
                                          bg_color="#2f2f2f", command=add_tab)
 add_tab_button.pack(anchor="ne", pady=5, padx=10)
-
+sv_ttk.set_theme("dark")
 root.mainloop()
